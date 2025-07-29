@@ -17,6 +17,9 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const isValid =
+    Object.keys(errors).length === 0 && formData.message.trim() !== "";
+
   const resetForm = () => {
     Object.keys(formData).forEach((key) => updateField(key, ""));
     setErrors({});
@@ -30,6 +33,8 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setSubmitSuccess(true);
+      console.log(formData);
+
       onSubmit();
       resetForm();
       setTimeout(() => {
@@ -60,11 +65,21 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
           id="message"
           rows={5}
           value={formData.message}
-          onChange={(e) => updateField("message", e.target.value)}
+          onChange={(e) => {
+            updateField("message", e.target.value);
+            setErrors((prev) => {
+              const next = { ...prev };
+              if (!e.target.value.trim()) {
+                next.message = "Message is required";
+              } else delete next.message;
+              return next;
+            });
+          }}
           className={`w-full px-4 py-3 bg-[#282b36] rounded-xl placeholder-gray-400 text-white border-2 outline-none transition
-            ${errors.message
-              ? "border-[#f87171] focus:border-[#f87171]"
-              : "border-transparent focus:border-[#36e2ae]"
+            ${
+              errors.message
+                ? "border-[#f87171] focus:border-[#f87171]"
+                : "border-transparent focus:border-[#36e2ae]"
             }`}
           placeholder="How can we help you?"
         />
@@ -95,18 +110,19 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
           type="button"
           onClick={onBack}
           disabled={submitting}
-          className="px-4 py-2 border-none rounded-full text-gray-400 hover:text-white text-base transition disabled:opacity-50"
+          className="px-4 py-2 border-none cursor-pointer rounded-full text-gray-400 hover:text-white text-base transition disabled:opacity-50"
         >
           Back
         </button>
         <button
           type="submit"
-          disabled={submitting}
-          className={`px-8 py-3 rounded-full font-semibold text-lg transition
-            ${submitting
-              ? "bg-[#363a43] text-gray-300 cursor-not-allowed"
-              : "bg-[#36e2ae] text-[#232633] hover:bg-[#3cfbbb]"
-            }`}
+          disabled={submitting && !isValid}
+          className={`w-full text-[#232633] text-lg font-semibold py-3 rounded-full transition
+        ${
+          isValid
+            ? "bg-[#36e2ae] hover:bg-[#3cfbbb] opacity-100 cursor-pointer"
+            : "bg-[#36e2ae] opacity-50 cursor-not-allowed"
+        }`}
         >
           {submitting ? "Submitting..." : "Submit"}
         </button>

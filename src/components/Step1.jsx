@@ -6,31 +6,37 @@ export const Step1 = ({ onNext }) => {
   const validate = () => {
     const newErrors = {};
 
-    if(!formData.firstName.trim()){
-        newErrors.firstName = "First Name is required";
-    }else if(!/^[a-zA-Z\s'-]+$/.test(formData.firstName)){
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First Name is required";
+    } else if (!/^[a-zA-Z\s'-]+$/.test(formData.firstName)) {
       newErrors.firstName = "Only letters and spaces are allowed";
     }
-    
-    if(!formData.lastName.trim()){
-        newErrors.lastName = "Last Name is required";
-    }else if(!/^[a-zA-Z\s'-]+$/.test(formData.lastName)){
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last Name is required";
+    } else if (!/^[a-zA-Z\s'-]+$/.test(formData.lastName)) {
       newErrors.lastName = "Only letters and spaces are allowed";
     }
 
-    if(!formData.email.trim()){
-        newErrors.email = 'Email is required';
-    }else if(!/\S+@\S+\.\S+/.test(formData.email)){
-        newErrors.email = 'Please enter a valid Email';
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid Email";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const isValid =
+    Object.keys(errors).length === 0 &&
+    formData.email.trim() !== "" &&
+    formData.firstName.trim() !== "" &&
+    formData.lastName.trim() !== "";
+
   const handleNext = (e) => {
     e.preventDefault();
-    if(validate())  onNext();
+    if (validate()) onNext();
   };
 
   return (
@@ -51,11 +57,21 @@ export const Step1 = ({ onNext }) => {
           type="email"
           id="email"
           value={formData.email}
-          onChange={(e) => updateField("email", e.target.value)}
+          onChange={(e) => {
+            updateField("email", e.target.value);
+            setErrors((prev) => {
+              const next = { ...prev };
+              if (!e.target.value.trim()) {
+                next.email = "Email is required";
+              } else delete next.email;
+              return next;
+            });
+          }}
           className={`w-full px-4 py-3 bg-[#282b36] rounded-xl placeholder-gray-400 text-white border-2 outline-none transition
-            ${errors.email
-              ? "border-[#f87171] focus:border-[#f87171]"
-              : "border-transparent focus:border-[#36e2ae]"
+            ${
+              errors.email
+                ? "border-[#f87171] focus:border-[#f87171]"
+                : "border-transparent focus:border-[#36e2ae]"
             }`}
           placeholder="Enter your email"
         />
@@ -77,16 +93,28 @@ export const Step1 = ({ onNext }) => {
             type="text"
             id="firstName"
             value={formData.firstName}
-            onChange={(e) => updateField("firstName", e.target.value)}
+            onChange={(e) => {
+              updateField("firstName", e.target.value);
+              setErrors((prev) => {
+                const next = { ...prev };
+                if (!e.target.value.trim()) {
+                  next.firstName = "First Name is required";
+                } else delete next.firstName;
+                return next;
+              });
+            }}
             className={`w-full px-4 py-3 bg-[#282b36] rounded-xl placeholder-gray-400 text-white border-2 outline-none transition
-              ${errors.firstName
-                ? "border-[#f87171] focus:border-[#f87171]"
-                : "border-transparent focus:border-[#36e2ae]"
+              ${
+                errors.firstName
+                  ? "border-[#f87171] focus:border-[#f87171]"
+                  : "border-transparent focus:border-[#36e2ae]"
               }`}
             placeholder="Enter your first name"
           />
           {errors.firstName && (
-            <p className="text-[#F87171] mt-1 text-xs pl-1">{errors.firstName}</p>
+            <p className="text-[#F87171] mt-1 text-xs pl-1">
+              {errors.firstName}
+            </p>
           )}
         </div>
 
@@ -101,23 +129,42 @@ export const Step1 = ({ onNext }) => {
             type="text"
             id="lastName"
             value={formData.lastName}
-            onChange={(e) => updateField("lastName", e.target.value)}
+            onChange={(e) => {
+              updateField("lastName", e.target.value);
+              setErrors((prev) => {
+                const next = { ...prev };
+                if (!e.target.value.trim()) {
+                  next.lastName = "Last Name is required";
+                } else delete next.lastName;
+                return next;
+              });
+            }}
             className={`w-full px-4 py-3 bg-[#282b36] rounded-xl placeholder-gray-400 text-white border-2 outline-none transition
-              ${errors.lastName
-                ? "border-[#f87171] focus:border-[#f87171]"
-                : "border-transparent focus:border-[#36e2ae]"
+              ${
+                errors.lastName
+                  ? "border-[#f87171] focus:border-[#f87171]"
+                  : "border-transparent focus:border-[#36e2ae]"
               }`}
             placeholder="Enter your last name"
           />
           {errors.lastName && (
-            <p className="text-[#F87171] mt-1 text-xs pl-1">{errors.lastName}</p>
+            <p className="text-[#F87171] mt-1 text-xs pl-1">
+              {errors.lastName}
+            </p>
           )}
         </div>
       </div>
 
       <button
         type="submit"
-        className="w-full cursor-pointer bg-[#36e2ae] hover:bg-[#3cfbbb] text-[#232633] text-lg font-semibold py-3 rounded-full transition"
+        disabled={!isValid}
+        className={`w-full text-[#232633] text-lg font-semibold py-3 rounded-full transition
+        ${
+          isValid
+            ? "bg-[#36e2ae] hover:bg-[#3cfbbb] opacity-100 cursor-pointer"
+            : "bg-[#36e2ae] opacity-50 cursor-not-allowed"
+        }
+  `}
       >
         Next
       </button>
