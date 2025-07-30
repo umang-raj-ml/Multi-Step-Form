@@ -1,6 +1,8 @@
 import { useFormContext } from "../contexts/FormContext";
 import { validateStep1 } from "../utils/validation";
 import InputField from "./atoms/InputField";
+import FormRow from "./atoms/FormRow";
+import Button from "./atoms/Button";
 
 
 export const Step1 = ({ onNext }) => {
@@ -47,93 +49,49 @@ export const Step1 = ({ onNext }) => {
       />
 
       {/* First Name & Last Name Side by Side */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label
-            htmlFor="firstName"
-            className="block text-gray-200 font-semibold mb-2"
-          >
-            First Name <span className="text-[#36e2ae]">*</span>
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            value={formData.firstName}
-            onChange={(e) => {
-              updateField("firstName", e.target.value);
-              setErrors((prev) => {
-                const next = { ...prev };
-                if (!e.target.value.trim()) {
-                  next.firstName = "First Name is required";
-                } else delete next.firstName;
-                return next;
-              });
-            }}
-            className={`w-full px-4 py-3 bg-[#282b36] rounded-xl placeholder-gray-400 text-white border-2 outline-none transition
-              ${
-                errors.firstName
-                  ? "border-[#f87171] focus:border-[#f87171]"
-                  : "border-transparent focus:border-[#36e2ae]"
-              }`}
-            placeholder="Enter your first name"
-          />
-          {errors.firstName && (
-            <p className="text-[#F87171] mt-1 text-xs pl-1">
-              {errors.firstName}
-            </p>
-          )}
-        </div>
+      <FormRow columns={2}>
+        <InputField 
+        id="firstName"
+        label="First Name"
+        value={formData.firstName}
+        required
+        error={errors.firstName}
+        placeholder="Enter your first name"
+        onChange={(e) => {
+          updateField("firstName", e.target.value)
+          setErrors(prev => {
+            const next = {...prev}
+            if(!e.target.value.trim()){
+              next.firstName = "First Name is required"
+            }else delete next.firstName
+            return next;
+          })
+        }}
+        />
 
-        <div>
-          <label
-            htmlFor="lastName"
-            className="block text-gray-200 font-semibold mb-2"
-          >
-            Last Name <span className="text-[#36e2ae]">*</span>
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            value={formData.lastName}
-            onChange={(e) => {
-              updateField("lastName", e.target.value);
-              setErrors((prev) => {
-                const next = { ...prev };
-                if (!e.target.value.trim()) {
-                  next.lastName = "Last Name is required";
-                } else delete next.lastName;
-                return next;
-              });
-            }}
-            className={`w-full px-4 py-3 bg-[#282b36] rounded-xl placeholder-gray-400 text-white border-2 outline-none transition
-              ${
-                errors.lastName
-                  ? "border-[#f87171] focus:border-[#f87171]"
-                  : "border-transparent focus:border-[#36e2ae]"
-              }`}
-            placeholder="Enter your last name"
-          />
-          {errors.lastName && (
-            <p className="text-[#F87171] mt-1 text-xs pl-1">
-              {errors.lastName}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        disabled={!isValid}
-        className={`w-full text-[#232633] text-lg font-semibold py-3 rounded-full transition
-        ${
-          isValid
-            ? "bg-[#36e2ae] hover:bg-[#3cfbbb] opacity-100 cursor-pointer"
-            : "bg-[#36e2ae] opacity-50 cursor-not-allowed"
-        }
-  `}
-      >
-        Next
-      </button>
+        <InputField
+        id="lastName"
+        label="Last Name"
+        value={formData.lastName}
+        required
+        error={errors.lastName}
+        placeholder="Enter your Last Name"
+        onChange={(e) => {
+          updateField("lastName", e.target.value)
+          setErrors(prev => {
+            const next = {...prev}
+            if(!e.target.value.trim()){
+              next.lastName = "Last Name is required";
+            }else delete next.lastName
+            return next;
+          })
+        }}
+        />
+      </FormRow>
+      <Button
+      type="submit"
+      disabled={!isValid}
+      >Next</Button>
     </form>
   );
 };
