@@ -1,8 +1,9 @@
 import { useFormContext } from "../../contexts/FormContext";
-import { validateStep1 } from "../../utils/validation";
+import { validateStep1, validateEmail, validateFirstName, validateLastName } from "../../utils/validation";
 import InputField from "../atoms/InputField";
 import FormRow from "../molecules/FormRow";
 import Button from "../atoms/Button";
+import ValidatedInput from "../molecules/ValidatedInput";
 
 
 export const Step1 = ({ onNext }) => {
@@ -27,64 +28,31 @@ export const Step1 = ({ onNext }) => {
       className="space-y-6 bg-[#232633] p-8 rounded-2xl shadow-2xl max-w-md mx-auto"
     >
       {/* Email Field */}
-      <InputField 
+      <ValidatedInput 
       id="email"
       label="Email"
       type="email"
-      value={formData.email}
+      validate={validateEmail}
       required
-      error={errors.email}
       placeholder="Enter your email"
-      onChange={(e) => {
-        updateField("email", e.target.value)
-        setErrors(prev => {
-          const next = {...prev}
-          if(!e.target.value.trim()){
-            next.email = "Email is required"
-          }else delete next.email 
-          return next;
-        })
-      }}
       />
 
       {/* First Name & Last Name Side by Side */}
       <FormRow columns={2}>
-        <InputField 
+        <ValidatedInput 
         id="firstName"
         label="First Name"
-        value={formData.firstName}
+        validate={validateFirstName}
         required
-        error={errors.firstName}
         placeholder="First name"
-        onChange={(e) => {
-          updateField("firstName", e.target.value)
-          setErrors(prev => {
-            const next = {...prev}
-            if(!e.target.value.trim()){
-              next.firstName = "First Name is required"
-            }else delete next.firstName
-            return next;
-          })
-        }}
         />
 
-        <InputField
+        <ValidatedInput
         id="lastName"
         label="Last Name"
-        value={formData.lastName}
+        validate={validateLastName}
         required
-        error={errors.lastName}
         placeholder="Last Name"
-        onChange={(e) => {
-          updateField("lastName", e.target.value)
-          setErrors(prev => {
-            const next = {...prev}
-            if(!e.target.value.trim()){
-              next.lastName = "Last Name is required";
-            }else delete next.lastName
-            return next;
-          })
-        }}
         />
       </FormRow>
       <Button

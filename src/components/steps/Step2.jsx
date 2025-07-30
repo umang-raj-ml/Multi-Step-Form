@@ -1,8 +1,9 @@
 import { useFormContext } from "../../contexts/FormContext";
-import { validateStep2 } from "../../utils/validation";
+import { validatePhone, validateAddress1, validateAddress2, validateCity, validateState, validateZip, validateStep2 } from "../../utils/validation";
 import Button from "../atoms/Button";
 import FormRow from "../molecules/FormRow";
 import InputField from "../atoms/InputField";
+import ValidatedInput from "../molecules/ValidatedInput";
 
 export const Step2 = ({ onNext, onBack }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
@@ -27,142 +28,60 @@ export const Step2 = ({ onNext, onBack }) => {
       className="space-y-6 bg-[#232633] p-8 rounded-2xl shadow-2xl max-w-md mx-auto"
     >
       {/* Phone (full width) */}
-      <InputField
+      <ValidatedInput
         id="phone"
         label="Phone"
         type="tel"
-        value={formData.phone}
-        error={errors.phone}
+        validate={validatePhone}
         placeholder="Enter your phone number"
-        onChange={(e) => {
-          updateField("phone", e.target.value);
-          setErrors((prev) => {
-            const next = { ...prev };
-            if (
-              e.target.value.trim() &&
-              !/^[0-9\s\-()+]+$/.test(e.target.value)
-            ) {
-              next.phone = "Phone number is invalid";
-            } else delete next.phone;
-            return next;
-          });
-        }}
       />
 
       {/* Address lines, side by side */}
       <FormRow columns={2}>
-        <InputField
+        <ValidatedInput
           id="address1"
           label="Address Line 1"
           type="text"
-          value={formData.address1}
-          error={errors.address1}
+          validate={validateAddress1}
           placeholder="Street Address"
           required
-          onChange={(e) => {
-            updateField("address1", e.target.value);
-            setErrors((prev) => {
-              const next = { ...prev };
-              if (!e.target.value.trim()) {
-                next.address1 = "Address Line 1 is required";
-              } else {
-                delete next.address1;
-              }
-              return next;
-            });
-          }}
         />
 
-        <InputField
+        <ValidatedInput
           id="address2"
           label="Address Line 2"
           type="text"
-          value={formData.address2}
-          error={errors.address2}
+          validate={validateAddress2}
           placeholder="Apartment, suite, etc."
-          onChange={(e) => {
-            updateField("address2", e.target.value);
-            setErrors((prev) => {
-              const next = { ...prev };
-              if (
-                e.target.value.trim() &&
-                !/^[a-zA-Z\s'-]+$/.test(e.target.value)
-              ) {
-                next.address2 = "Address Line 2 is invalid";
-              } else {
-                delete next.address2;
-              }
-              return next;
-            });
-          }}
         />
       </FormRow>
 
       {/* City, State, Zip side by side */}
       <FormRow columns={3}>
-        <InputField
+        <ValidatedInput
           id="city"
           label="City"
           type="text"
-          value={formData.city}
-          error={errors.city}
+          validate={validateCity}
           required
-          onChange={(e) => {
-            updateField("city", e.target.value);
-            setErrors((prev) => {
-              const next = { ...prev };
-              if (!e.target.value.trim()) {
-                next.city = "City is required";
-              } else {
-                delete next.city;
-              }
-              return next;
-            });
-          }}
           placeholder="Your city"
         />
 
-        <InputField
+        <ValidatedInput
           id="state"
           label="State"
           type="text"
-          value={formData.state}
-          error={errors.state}
+          validate={validateState}
           required
-          onChange={(e) => {
-            updateField("state", e.target.value);
-            setErrors((prev) => {
-              const next = { ...prev };
-              if (!e.target.value.trim()) {
-                next.state = "State is required";
-              } else {
-                delete next.state;
-              }
-              return next;
-            });
-          }}
           placeholder="State"
         />
 
-        <InputField
+        <ValidatedInput
           id="zip"
           label="Zip"
           type="text"
-          value={formData.zip}
-          error={errors.zip}
+          validate={validateZip}
           required
-          onChange={(e) => {
-            updateField("zip", e.target.value);
-            setErrors((prev) => {
-              const next = { ...prev };
-              if (!e.target.value.trim()) {
-                next.zip = "ZIP code is required";
-              } else {
-                delete next.zip;
-              }
-              return next;
-            });
-          }}
           placeholder="ZIP code"
         />
       </FormRow>

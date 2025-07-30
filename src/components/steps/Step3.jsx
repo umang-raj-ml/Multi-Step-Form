@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useFormContext } from "../../contexts/FormContext";
-import { validateStep3 } from "../../utils/validation";
+import { validateMessage, validateStep3 } from "../../utils/validation";
 import TextareaField from "../atoms/TextareaField";
 import Button from "../atoms/Button";
 import FormRow from "../molecules/FormRow";
+import ValidatedTextarea from "../molecules/ValidatedTextArea";
 
 export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
@@ -50,33 +51,21 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
       className="space-y-6 bg-[#232633] p-8 rounded-2xl shadow-2xl max-w-md mx-auto"
     >
       <FormRow columns={2}>
-      <TextareaField
-        id="message"
-        label="Message"
-        rows={5}
-        required
-        value={formData.message}
-        error={errors.message}
-        onChange={(e) => {
-          updateField("message", e.target.value);
-          setErrors((prev) => {
-            const next = { ...prev };
-            if (!e.target.value.trim()) {
-              next.message = "Message is required";
-            } else delete next.message;
-            return next;
-          });
-        }}
-        placeholder="How can we help you?"
-      />
+        <ValidatedTextarea
+          id="message"
+          label="Message"
+          rows={5}
+          required
+          validate={validateMessage}
+          placeholder="How can we help you?"
+        />
 
-      <TextareaField
+      <ValidatedTextarea
         id="suggestions"
         label="Suggestions"
         rows={5}
         value={formData.suggestions}
         placeholder="Any suggestions?"
-        onChange={e => updateField("suggestions", e.target.value)}
       />
       </FormRow>
 
