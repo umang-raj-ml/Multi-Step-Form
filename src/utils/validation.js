@@ -1,4 +1,5 @@
-//Step 1 Validation for Email & Names
+//NOTE -  Step 1 Validation for Email & Names
+
 export function validateStep1({ firstName, lastName, email }) {
   const errors = {};
   if (!firstName?.trim()) {
@@ -13,7 +14,7 @@ export function validateStep1({ firstName, lastName, email }) {
   }
   if (!email?.trim()) {
     errors.email = "Email is required";
-  } else if (!/\S+@\S+\.\S+/.test(email)) {
+  } else if (!/^\S+@\S+\.\S{2,}$/.test(email)) {
     errors.email = "Please enter a valid Email";
   }
   return errors;

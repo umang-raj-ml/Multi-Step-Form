@@ -9,7 +9,6 @@ export const Step1 = ({ onNext }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
 
   const isValid =
-    Object.keys(errors).length === 0 &&
     formData.email.trim() !== "" &&
     formData.firstName.trim() !== "" &&
     formData.lastName.trim() !== "";

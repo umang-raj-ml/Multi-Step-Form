@@ -8,7 +8,6 @@ export const Step2 = ({ onNext, onBack }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
 
   const isValid =
-    Object.keys(errors).length === 0 &&
     formData.address1.trim() !== "" &&
     formData.city.trim() !== "" &&
     formData.state.trim() !== "" &&

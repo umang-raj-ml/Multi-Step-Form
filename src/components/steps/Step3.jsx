@@ -3,6 +3,7 @@ import { useFormContext } from "../../contexts/FormContext";
 import { validateStep3 } from "../../utils/validation";
 import TextareaField from "../atoms/TextareaField";
 import Button from "../atoms/Button";
+import FormRow from "../molecules/FormRow";
 
 export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
@@ -48,6 +49,7 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
       noValidate
       className="space-y-6 bg-[#232633] p-8 rounded-2xl shadow-2xl max-w-md mx-auto"
     >
+      <FormRow columns={2}>
       <TextareaField
         id="message"
         label="Message"
@@ -71,11 +73,12 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
       <TextareaField
         id="suggestions"
         label="Suggestions"
-        rows={3}
+        rows={5}
         value={formData.suggestions}
         placeholder="Any suggestions?"
         onChange={e => updateField("suggestions", e.target.value)}
       />
+      </FormRow>
 
       <div className="flex justify-between mt-8">
         <button
@@ -96,7 +99,7 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
       </div>
       {submitSuccess && (
         <p className="mt-4 text-[#36e2ae] font-semibold text-center">
-          Form submitted successfully! Redirecting to Step 1...
+          Thank you for contacting us! You’ll be redirected shortly if you wish to send another message.
         </p>
       )}
     </form>
