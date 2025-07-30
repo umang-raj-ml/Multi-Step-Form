@@ -1,21 +1,11 @@
 import { useState } from "react";
 import { useFormContext } from "../contexts/FormContext";
+import { validateStep3 } from "../utils/validation";
 
 export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const validate = () => {
-    const newErrors = {};
-
-    if (!formData.message.trim()) newErrors.message = "Message is required";
-    else if (formData.message.length < 10)
-      newErrors.message = "Message must be at least 10 characters";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const isValid =
     Object.keys(errors).length === 0 && formData.message.trim() !== "";
@@ -27,11 +17,13 @@ export const Step3 = ({ onBack, onSubmit, goToStep1 }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    const newErrors = validateStep3(formData)
+    setErrors(newErrors)
+    if(Object.keys(newErrors).length !== 0) return;
     setSubmitting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000)); //just for simulation
       setSubmitSuccess(true);
       console.log(formData);
 

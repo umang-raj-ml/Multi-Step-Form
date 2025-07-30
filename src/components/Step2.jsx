@@ -1,22 +1,8 @@
 import { useFormContext } from "../contexts/FormContext";
+import { validateStep2 } from "../utils/validation";
 
 export const Step2 = ({ onNext, onBack }) => {
   const { formData, updateField, errors, setErrors } = useFormContext();
-
-  const validate = () => {
-    const newErrors = {};
-    if (formData.phone.trim() && !/^[0-9\s\-()+]+$/.test(formData.phone))
-      newErrors.phone = "Phone number is invalid";
-    if (!formData.address1.trim())
-      newErrors.address1 = "Address Line 1 is required";
-    if (!formData.city.trim()) newErrors.city = "City is required";
-    if (!formData.state.trim()) newErrors.state = "State is required";
-    if (!formData.zip.trim()) newErrors.zip = "ZIP code is required";
-    else if (!/^\d{6}(-\d{4})?$/.test(formData.zip))
-      newErrors.zip = "ZIP code is invalid";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const isValid =
     Object.keys(errors).length === 0 &&
@@ -27,7 +13,9 @@ export const Step2 = ({ onNext, onBack }) => {
 
   const handleNext = (e) => {
     e.preventDefault();
-    if (validate()) onNext();
+    const newErrors = validateStep2(formData)
+    setErrors(newErrors)
+    if(Object.keys(newErrors).length === 0) onNext()
   };
 
   return (
@@ -132,8 +120,8 @@ export const Step2 = ({ onNext, onBack }) => {
               updateField("address2", e.target.value);
               setErrors((prev) => {
                 const next = { ...prev };
-                if (!e.target.value.trim()) {
-                  next.address2 = "Address Line 2 is required";
+                if (e.target.value.trim() && !/^[a-zA-Z\s'-]+$/.test(e.target.value)) {
+                  next.address2 = "Address Line 2 is invalid";
                 } else {
                   delete next.address2;
                 }
@@ -269,6 +257,7 @@ export const Step2 = ({ onNext, onBack }) => {
         </div>
       </div>
 
+          {/* Buttons  */}
       <div className="flex justify-between mt-8">
         <button
           disabled={!errors.length === 0}
