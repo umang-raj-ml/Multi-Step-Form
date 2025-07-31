@@ -23,7 +23,7 @@ export function validateStep1({ firstName, lastName, email }) {
 //NOTE - Step 2 Validation for address
 export function validateStep2({ phone, address1, city, state, zip }) {
   const errors = {};
-  if (phone?.trim() && !/^[0-9\s\-()+]+$/.test(phone))
+  if (phone?.trim() && !/^[1-9][0-9]{9}$/.test(phone))
     errors.phone = "Phone number is invalid";
   if (!address1?.trim()) errors.address1 = "Address Line 1 is required";
   if (!city?.trim()) errors.city = "City is required";
@@ -50,7 +50,7 @@ export const validateMessage = (value) => {
 };
 
 export const validatePhone = (value) => {
-  if (value?.trim() && !/^[0-9\s\-()+]+$/.test(value)) {
+  if (value?.trim() && !/^[1-9][0-9]{9}$/.test(value)) {
     return "Phone number is invalid";
   }
   return null;
@@ -110,6 +110,5 @@ export const validateEmail = (value) => {
   if (!value?.trim()) {
     return "Email is required";
   }
-
   return null;
 };

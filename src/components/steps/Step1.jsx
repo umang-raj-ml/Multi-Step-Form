@@ -1,13 +1,12 @@
 import { useFormContext } from "../../contexts/FormContext";
 import { validateStep1, validateEmail, validateFirstName, validateLastName } from "../../utils/validation";
-import InputField from "../atoms/InputField";
 import FormRow from "../molecules/FormRow";
 import Button from "../atoms/Button";
 import ValidatedInput from "../molecules/ValidatedInput";
 
 
 export const Step1 = ({ onNext }) => {
-  const { formData, updateField, errors, setErrors } = useFormContext();
+  const { formData, setErrors } = useFormContext();
 
   const isValid =
     formData.email.trim() !== "" &&
